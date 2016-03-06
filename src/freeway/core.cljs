@@ -2,15 +2,21 @@
   (:require [goog.dom :as gdom]
             [om.core :as om :include-macros true]
             [freeway.payments :as p]
-            [freeway.state :as s]
             [sablono.core :as html :refer-macros [html]]))
 
 (enable-console-print!)
 
 (defn get-value [e] (.. e -target -value))
-(defn $ [v] (str "$" (-> v (.toFixed 0) .toLocaleString)))
-(defn apr [v] (str (-> v (* 100) (.toFixed 2)) "%"))
+(defn |$ [v] (str "$" (-> v js/Math.round (.toLocaleString #js {:style "currency"}))))
 (defn num [v] (js/parseFloat v))
+(defn |% [v] (/ v 100))
+
+(defonce app-state (atom {:price        16900
+                          :fees         0
+                          :sales-tax    6
+                          :trade-in     0
+                          :downpayments [1000 2000 3000]
+                          :terms        [[24 3.10] [36 4.1] [48 5.1] [60 6.1]]}))
 
 (defn numeric-field [value step on-change]
   (html [:input.fw-field
@@ -28,7 +34,7 @@
 (defn worksheet-readonly-field [label value]
   (html [:div.fw-worksheet-field
          [:span.fw-label label]
-         [:div.fw-field ($ value)]]))
+         [:div.fw-field (|$ value)]]))
 
 (defn worksheet-globals [props]
   (let [{:keys [price fees sales-tax trade-in]} props
@@ -38,7 +44,10 @@
            (worksheet-global-field "Tax (%)" sales-tax 0.1 (partial set-value [:sales-tax]))
            (worksheet-global-field "Fees" fees 10 (partial set-value [:fees]))
            (worksheet-global-field "Trade-in" trade-in 100 (partial set-value [:trade-in]))
-           (worksheet-readonly-field "Financed cost" (p/cost price (/ sales-tax 100) fees trade-in))])))
+           [:div.financed-cost
+            [:div "Financed cost"]
+            [:strong (|$ (p/cost price sales-tax fees trade-in))]]])))
+;; TODO: use (|% )
 
 (defn worksheet-header [{:keys [downpayments] :as props}]
   (html [:thead.fw-payment-header
@@ -49,7 +58,7 @@
 
 (defn payment-cell [props]
   (let [{:keys [principal apr payments]} props]
-    (html [:div.fw-payment-cell ($ (p/monthly-payment principal apr payments)) [:small "/mo"]])))
+    (html [:div.fw-payment-cell (|$ (p/monthly-payment principal apr payments)) [:small "/mo"]])))
 
 (defn worksheet-row [props]
   (let [{:keys [term principal payment-data index]} props
@@ -90,4 +99,4 @@
               (worksheet-globals props)
               (payment-worksheet props)]]))))
 
-(om/root freeway-app s/app-state {:target (gdom/getElement "app")})
+(om/root freeway-app app-state {:target (gdom/getElement "app")})

@@ -91,10 +91,17 @@ input.fw-field {
     }
   }
 
-  & > :last-child {
+  .financed-cost {
     border-top: 1px solid color(divider);
-    padding-top: g() - 1;
-    font-weight: bold;
+    padding-top: g(2);
+    text-align: right;
+
+    strong {
+      display: block;
+      padding-top: g(2);
+      font-size: $large-font-size;
+      line-height: $large-line-height;
+    }
   }
 }
 
@@ -107,7 +114,9 @@ input.fw-field {
     width: 100%;
   }
 }
-
+.fw-payment-header {
+  text-align: right;
+}
 
 .fw-payment-cell {
   text-align: right;
@@ -134,7 +143,6 @@ input.fw-field {
       margin-right: 0;
     }
   }
-
 
   .fw-months .fw-field {
     width: g(4);

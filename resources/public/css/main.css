@@ -53,10 +53,15 @@ input.fw-field {
       width: 104px; }
     .fw-worksheet-globals > .fw-worksheet-field > .fw-field {
       width: 64px; }
-  .fw-worksheet-globals > :last-child {
+  .fw-worksheet-globals .financed-cost {
     border-top: 1px solid #ccc;
-    padding-top: 7px;
-    font-weight: bold; }
+    padding-top: 16px;
+    text-align: right; }
+    .fw-worksheet-globals .financed-cost strong {
+      display: block;
+      padding-top: 16px;
+      font-size: 28px;
+      line-height: 32px; }
 
 .fw-payment-worksheet {
   padding: 16px;
@@ -65,6 +70,9 @@ input.fw-field {
   overflow: auto; }
   .fw-payment-worksheet table {
     width: 100%; }
+
+.fw-payment-header {
+  text-align: right; }
 
 .fw-payment-cell {
   text-align: right;
