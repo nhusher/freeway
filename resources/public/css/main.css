@@ -1,0 +1,91 @@
+* {
+  box-sizing: border-box; }
+
+body {
+  margin: 0;
+  padding: 0;
+  font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+  font-size: 14px;
+  line-height: 16px; }
+
+.fw-app {
+  margin: 40px;
+  padding: 8px; }
+
+.fw-app-body {
+  display: flex;
+  overflow: hidden; }
+
+.fw-worksheet-field {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  padding: 8px; }
+  .fw-worksheet-field > * {
+    margin: 0 8px; }
+    .fw-worksheet-field > *:first-child {
+      margin-left: 0; }
+    .fw-worksheet-field > *:last-child {
+      margin-right: 0; }
+
+.fw-field {
+  padding: 7px;
+  border: 1px solid transparent;
+  font-size: inherit;
+  line-height: inherit;
+  text-align: right; }
+
+input.fw-field {
+  border-color: #ccc; }
+  input.fw-field::-webkit-inner-spin-button {
+    display: none; }
+
+.fw-worksheet-globals {
+  display: flex;
+  flex-grow: 0;
+  flex-shrink: 0;
+  flex-direction: column;
+  padding: 16px;
+  border-right: 1px solid #ccc; }
+  .fw-worksheet-globals > .fw-worksheet-field {
+    flex-grow: 0; }
+    .fw-worksheet-globals > .fw-worksheet-field > .fw-label {
+      width: 104px; }
+    .fw-worksheet-globals > .fw-worksheet-field > .fw-field {
+      width: 64px; }
+  .fw-worksheet-globals > :last-child {
+    border-top: 1px solid #ccc;
+    padding-top: 7px;
+    font-weight: bold; }
+
+.fw-payment-worksheet {
+  padding: 16px;
+  flex-grow: 1;
+  flex-shrink: 1;
+  overflow: auto; }
+  .fw-payment-worksheet table {
+    width: 100%; }
+
+.fw-payment-cell {
+  text-align: right;
+  font-size: 28px;
+  line-height: 32px;
+  padding: 8px; }
+  .fw-payment-cell small {
+    color: rgba(0, 0, 0, 0.33); }
+
+.fw-term-widget {
+  display: flex;
+  white-space: nowrap; }
+  .fw-term-widget > * {
+    margin: 0 8px; }
+    .fw-term-widget > *:first-child {
+      margin-left: 0; }
+    .fw-term-widget > *:last-child {
+      margin-right: 0; }
+  .fw-term-widget .fw-months .fw-field {
+    width: 32px; }
+  .fw-term-widget .fw-apr .fw-field {
+    width: 48px; }
+
+/*# sourceMappingURL=main.css.map */

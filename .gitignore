@@ -1,0 +1,7 @@
+target/
+.idea/
+.sass-cache/
+figwheel_server.log
+*.iml
+resources/public/js
+.DS_Store

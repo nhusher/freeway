@@ -1,0 +1,145 @@
+
+$g: 8px;
+@function g($m:1) {
+  @return $m * $g;
+}
+$standard-font-size: 14px;
+$standard-line-height: g(2);
+$large-font-size: $standard-font-size * 2;
+$large-line-height: $standard-line-height * 2;
+
+$colors: (
+  divider: #ccc
+);
+
+@function color($c) {
+  @if map-has_key($colors, $c) {
+    @return map-get($colors, $c)
+  }
+  @warn "Unknown key `#{$c}` in colors.";
+  @return null;
+}
+
+* { box-sizing: border-box; }
+
+body {
+  margin: 0;
+  padding: 0;
+  font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+  font-size: $standard-font-size;
+  line-height: $standard-line-height;
+}
+
+.fw-app {
+  margin: g(5);
+  padding: g();
+}
+.fw-app-body {
+  display: flex;
+  overflow: hidden;
+}
+
+.fw-worksheet-field {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  padding: g();
+
+  & > * {
+    margin: 0 $g;
+
+    &:first-child {
+      margin-left: 0;
+    }
+    &:last-child {
+      margin-right: 0;
+    }
+  }
+}
+
+.fw-field {
+  padding: g() - 1;
+  border: 1px solid transparent;
+  font-size: inherit;
+  line-height: inherit;
+  text-align: right;
+}
+input.fw-field {
+  border-color: color(divider);
+
+  &::-webkit-inner-spin-button {
+    display: none;
+  }
+}
+
+.fw-worksheet-globals {
+  display: flex;
+  flex-grow: 0;
+  flex-shrink: 0;
+  flex-direction: column;
+  padding: g(2);
+  border-right: 1px solid color(divider);
+
+  & > .fw-worksheet-field {
+    flex-grow: 0;
+
+    & > .fw-label {
+      width: g(13);
+    }
+    & > .fw-field {
+      width: g(8);
+    }
+  }
+
+  & > :last-child {
+    border-top: 1px solid color(divider);
+    padding-top: g() - 1;
+    font-weight: bold;
+  }
+}
+
+.fw-payment-worksheet {
+  padding: g(2);
+  flex-grow: 1;
+  flex-shrink: 1;
+  overflow: auto;
+  table {
+    width: 100%;
+  }
+}
+
+
+.fw-payment-cell {
+  text-align: right;
+  font-size: $large-font-size;
+  line-height: $large-line-height;
+  padding: g();
+
+  small {
+    color: transparentize(black, 0.67k);
+  }
+}
+
+.fw-term-widget {
+  display: flex;
+  white-space: nowrap;
+
+  & > * {
+    margin: 0 g();
+
+    &:first-child {
+      margin-left: 0;
+    }
+    &:last-child {
+      margin-right: 0;
+    }
+  }
+
+
+  .fw-months .fw-field {
+    width: g(4);
+  }
+  .fw-apr .fw-field {
+    width: g(6);
+  }
+}
