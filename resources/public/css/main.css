@@ -16,6 +16,17 @@ body {
   display: flex;
   overflow: hidden; }
 
+.fw-button {
+  padding: 8px 24px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  background: #eee;
+  font-size: inherit;
+  cursor: pointer;
+  transition: border-color 250ms; }
+  .fw-button:hover, .fw-button:focus {
+    border-color: #8c8c8c; }
+
 .fw-worksheet-field {
   display: flex;
   flex-direction: row;
