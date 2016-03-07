@@ -39,6 +39,21 @@ body {
   overflow: hidden;
 }
 
+.fw-button {
+  padding: g() g(3);
+  border: 1px solid color(divider);
+  border-radius: g() / 2;
+  background: #eee;
+  font-size: inherit;
+  cursor: pointer;
+  transition: border-color 250ms;
+
+  &:hover,
+  &:focus {
+    border-color: darken(color(divider), 25%);
+  }
+}
+
 .fw-worksheet-field {
   display: flex;
   flex-direction: row;

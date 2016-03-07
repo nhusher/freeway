@@ -1,12 +1,15 @@
 (ns freeway.payments)
 
 (defn pow [a b] (js/Math.pow a b))
+(defn _% [v] (/ v 100))
 
-(defn cost [price sales-tax fees trade-in]
+(defn cost' [price sales-tax fees trade-in]
   (+ price (* price sales-tax) sales-tax fees (- trade-in)))
 
-(defn monthly-payment
-  "For a given principal, APR, and number of payments, return the monthly payment"
+(defn cost [price sales-tax fees trade-in]
+  (cost' price (_% sales-tax) fees trade-in))
+
+(defn monthly-payment'
   [principal apr payment-count]
   (let [interest (/ apr 12)]
     (* principal
@@ -14,19 +17,10 @@
           (/ interest
              (- (pow (+ 1 interest) payment-count) 1))))))
 
-(def sample-payment
-  {:price     16991
-   :trade-ins [3200]
-   :fees      [500]
-   :apr       0.03
-   :payments  48})
-
-(defn sales-tax [p {sales-tax :sales-tax}]
-  (* p sales-tax))
-
-(defn trade-ins [p {trades :trade-ins}]
-  (reduce - p trades))
-
-(defn fees [p {fees :fees}]
-  (reduce - p fees))
+(defn monthly-payment
+  "For a given principal, APR, and number of payments, return the monthly payment, handles zero % APR correctly."
+  [principal apr payment-count]
+  (if (zero? apr)
+    (/ principal payment-count)
+    (monthly-payment' principal apr payment-count)))
 
