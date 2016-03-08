@@ -7,15 +7,19 @@
 (enable-console-print!)
 
 (defn get-value [e] (.. e -target -value))
-(defn |$ [v] (str "$" (-> v js/Math.round (.toLocaleString #js {:style "currency"}))))
+(defn _$ [v] (str "$" (-> v js/Math.round (.toLocaleString #js {:style "currency"}))))
 (defn num [v] (if (js/isNaN (js/parseFloat v)) 0 (js/parseFloat v)))
 
-(defonce app-state (atom {:price        16900
+(defn add-new-term [terms]
+  (let [[months apr] (last terms)]
+    (conj terms [(+ months 12) (+ apr 1)])))
+
+(defonce app-state (atom {:price        15000
                           :fees         0
                           :sales-tax    6
                           :trade-in     0
                           :downpayments [1000 2000 3000]
-                          :terms        [[24 3.10]]}))
+                          :terms        [[24 2.10] [36 3.10] [48 4.10]]}))
 
 (defn button [on-click text]
   (html [:button.fw-button
@@ -30,10 +34,6 @@
           :min       0
           :step      step
           :on-change (comp on-change get-value)}]))
-
-(defn add-term! [terms]
-  (let [[months apr] (last terms)]
-    (conj terms [(+ months 12) (+ apr 1)])))
 
 (defn worksheet-global-field [label value step on-change]
   (html [:label.fw-worksheet-field
@@ -50,19 +50,19 @@
            (worksheet-global-field "Trade-in" trade-in 100 (partial set-value [:trade-in]))
            [:div.financed-cost
             [:div "Financed cost"]
-            [:strong (|$ (p/cost' price sales-tax fees trade-in))]]])))
+            [:strong (_$ (p/cost price sales-tax fees trade-in))]]])))
 
 (defn worksheet-header [{:keys [downpayments] :as props}]
   (html [:thead.fw-payment-header
          [:tr
-          [:th]
+          [:th "Money down:"]
           (for [[d i] (map #(vector %1 %2) downpayments (range))]
             [:th (numeric-field d 100 #(om/update! props [:downpayments i] %))])]]))
 
 (defn payment-cell [props]
   (let [{:keys [principal apr payments]} props
-        payment (p/monthly-payment' principal apr payments)]
-    (html [:div.fw-payment-cell (|$ payment) [:small "/mo"]])))
+        payment (p/monthly-payment principal apr payments)]
+    (html [:div.fw-payment-cell (_$ payment) [:small "/mo"]])))
 
 (defn worksheet-row [props]
   (let [{:keys [term principal payment-data index]} props
@@ -85,14 +85,14 @@
 
 (defn payment-worksheet [props]
   (let [{:keys [terms price fees sales-tax trade-in]} props
-        principal (p/cost price (/ sales-tax 100) fees trade-in)]
+        principal (p/cost price sales-tax fees trade-in)]
     (html [:div.fw-payment-worksheet
            [:table
             (worksheet-header props)
             [:tbody
              (for [[term i] (map #(vector %1 %2) terms (range))]
                (worksheet-row {:term term :principal principal :payment-data props :index i}))
-             [:tr [:td (button #(om/transact! props [:terms] add-term!) "Add another row")]]]]])))
+             [:tr [:td (button #(om/transact! props [:terms] add-new-term) "Add another row")]]]]])))
 
 (defn freeway-app [props _]
   (reify
